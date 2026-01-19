@@ -1,0 +1,42 @@
+// Code your testbench here
+// or browse Examples
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+class vlsi extends uvm_object;
+  function new(string path="vlsi");
+    super.new(path);
+  endfunction:new
+  rand bit[7:0]a;
+  rand bit [7:0]b;
+  `uvm_object_utils_begin(vlsi)
+  `uvm_field_int(a,UVM_NOCOPY|UVM_BIN);
+  `uvm_field_int(b,UVM_DEFAULT|UVM_BIN);
+  `uvm_object_utils_end
+endclass
+module tb;
+  vlsi v1,v2;
+  initial begin
+    v1=new("v1");
+    v2=new("v2");
+    v1.randomize();
+    v2.copy(v1);
+    v1.print();
+    v2.print();
+  end
+endmodule
+
+//output:
+# KERNEL: --------------------------------
+# KERNEL: Name  Type      Size  Value     
+# KERNEL: --------------------------------
+# KERNEL: v1    vlsi      -     @335      
+# KERNEL:   a   integral  8     'b1000110 
+# KERNEL:   b   integral  8     'b10100101
+# KERNEL: --------------------------------
+# KERNEL: --------------------------------
+# KERNEL: Name  Type      Size  Value     
+# KERNEL: --------------------------------
+# KERNEL: v2    vlsi      -     @336      
+# KERNEL:   a   integral  8     'b0       
+# KERNEL:   b   integral  8     'b10100101
+# KERNEL: --------------------------------
