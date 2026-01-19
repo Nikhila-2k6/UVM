@@ -1,0 +1,36 @@
+// Code your testbench here
+// or browse Examples
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+class vlsi extends uvm_object;
+  function new(string path="vlsi");
+    super.new(path);
+  endfunction:new
+  rand bit[7:0]a;
+  rand bit [7:0]b;
+  `uvm_object_utils_begin(vlsi)
+  `uvm_field_int(b,UVM_DEFAULT);
+  `uvm_field_int(a,UVM_NOPRINT);
+  `uvm_object_utils_end
+endclass
+module tb;
+  vlsi v;
+  initial begin
+    v=new("vlsi");
+    v.randomize();
+    //`uvm_info("top_tb",$sformatf("value=%od",v.a),UVM_NONE);
+    //v.print(uvm_default_tree_printer);
+    //v.print(uvm_default_line_printer);
+    v.print(uvm_default_table_printer);
+  end
+endmodule
+
+//output
+# KERNEL: ASDB file was created in location /home/runner/dataset.asdb
+# KERNEL: ---------------------------
+# KERNEL: Name  Type      Size  Value
+# KERNEL: ---------------------------
+# KERNEL: vlsi  vlsi      -     @335 
+# KERNEL:   b   integral  8     'ha5 
+# KERNEL: ---------------------------
+# KERNEL: Simulation has finished. There are no more test vectors to simulate.
