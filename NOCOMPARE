@@ -1,0 +1,54 @@
+// Code your testbench here
+// or browse Examples
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+class vlsi extends uvm_object;
+  function new(string path="vlsi");
+    super.new(path);
+  endfunction:new
+  rand bit[7:0]a;
+  rand bit [7:0]b;
+  `uvm_object_utils_begin(vlsi)
+  `uvm_field_int(a,UVM_NOCOMPARE|UVM_BIN);
+  `uvm_field_int(b,UVM_DEFAULT|UVM_BIN);
+  `uvm_object_utils_end
+endclass
+module tb;
+  vlsi v1,v2;
+  bit result;
+  initial begin
+    v1=new("v1");
+    v2=new("v2");
+    v1.randomize();
+    v2.randomize();
+    v2.a=~v1.a; //*************
+    //when we haven't given negetion and simply written as v2.a=v1.a then also we can get correct answer but will get same output when given as default instead of nocompare. so we use negetion so that when used nocompare even though we given as negetion it will not compare so we get correct answer, but when given default for condition v2.a=~v1.a; we get different output(no compare success, default fail.
+    result=v2.compare(v1);
+    if (result)
+      $display("comparision successful");
+    else
+      $display("failed");
+    v1.print();
+    v2.print();
+  end
+endmodule
+
+//output:
+# KERNEL: UVM_INFO /home/build/vlib1/vlib/uvm-1.2/src/base/uvm_comparer.svh(351) @ 0: reporter [MISCMP] Miscompare for v2.b: lhs = 'hc0 : rhs = 'ha5
+# KERNEL: UVM_INFO /home/build/vlib1/vlib/uvm-1.2/src/base/uvm_comparer.svh(382) @ 0: reporter [MISCMP] 1 Miscompare(s) for object v1@335 vs. v2@336
+# KERNEL: failed
+# KERNEL: --------------------------------
+# KERNEL: Name  Type      Size  Value     
+# KERNEL: --------------------------------
+# KERNEL: v1    vlsi      -     @335      
+# KERNEL:   a   integral  8     'b1000110 
+# KERNEL:   b   integral  8     'b10100101
+# KERNEL: --------------------------------
+# KERNEL: --------------------------------
+# KERNEL: Name  Type      Size  Value     
+# KERNEL: --------------------------------
+# KERNEL: v2    vlsi      -     @336      
+# KERNEL:   a   integral  8     'b10111001
+# KERNEL:   b   integral  8     'b11000000
+# KERNEL: --------------------------------
+# KERNEL: Simulation has finished. There are no more test vectors to simulate.
